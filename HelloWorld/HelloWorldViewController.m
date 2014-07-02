@@ -9,6 +9,42 @@
 #import "HelloWorldViewController.h"
 
 @implementation HelloWorldViewController
+@synthesize label_hello;
+@synthesize button_iphone;
+@synthesize button_ipad;
+@synthesize button_ipod;
+@synthesize image_bird;
+@synthesize slider_alpha;
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    for (UITouch *touch in touches) {
+        if (CGRectContainsPoint([image_bird frame], [touch locationInView:self.view])) {
+            image_bird.center = [touch locationInView:self.view];
+        }
+    }
+}
+
+- (IBAction) button1Touched {
+    self.label_hello.text = @"Hello iPhone!";
+}
+- (IBAction) button2Touched {
+    self.label_hello.text = @"Hello iPad!";
+}
+- (IBAction) button3Touched {
+    self.label_hello.text = @"Hello iPod!";
+}
+
+- (IBAction) sliderChanged {
+	image_bird.alpha = slider_alpha.value;
+}
+
+- (void)dealloc {
+    [label_hello release];
+    [button_iphone release];
+    [button_ipad release];
+    [button_ipod release];
+    [super dealloc];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -18,10 +54,13 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+- (void)viewDidLoad {
+    [[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1.0 / 30)];
+    [[UIAccelerometer sharedAccelerometer] setDelegate:self];
+}
+
+- (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {
+    NSLog(@"UIAccelerometer = (%f,%f,%f)", acceleration.x, acceleration.y, acceleration.z);
 }
 
 - (void)viewDidUnload
